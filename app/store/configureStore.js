@@ -1,5 +1,17 @@
-if (process.env.NODE_ENV === 'production') {
-    module.exports = require('./configureStore.prod');
-} else {
-    module.exports = require('./configureStore.dev');
+import createHistory from 'history/createBrowserHistory';
+import { applyMiddleware, compose, createStore } from 'redux';
+import { routerMiddleware } from 'react-router-redux';
+import rootReducer from '../reducers';
+
+export const history = createHistory();
+const middleware = routerMiddleware(history);
+
+export function configureStore(initialState) {
+  return createStore(
+    rootReducer,
+    initialState,
+    compose(
+      applyMiddleware(middleware)
+    )
+  );
 }
